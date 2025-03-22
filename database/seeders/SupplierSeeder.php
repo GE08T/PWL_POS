@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -34,7 +35,7 @@ class SupplierSeeder extends Seeder
                 'created_at'     => now(),
                 'updated_at'     => now(),
             ],
-        
         ];
+        DB::table('m_supplier')->insert($data);
     }
 }
