@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login Pengguna</title>
+    <title>Register Pengguna</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -22,14 +22,22 @@
         <div class="card card-outline card-primary">
             <div class="card-header text-center"><a href="{{ url('/') }}" class="h1"><b>Admin</b>LTE</a></div>
             <div class="card-body">
-                <p class="login-box-msg">Sign in to start your session</p>
-                <form action="{{ url('login') }}" method="POST" id="form-login"> 
+                <p class="login-box-msg">Sign Up to start your session</p>
+                <form action="{{ url('register') }}" method="POST" id="form-register"> 
                     @csrf
                     <div class="input-group">
                         <input type="text" id="username" name="username" class="form-control" placeholder="Username">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mt-3">
+                        <input type="text" id="nama" name="nama" class="form-control" placeholder="Nama Lengkap">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
                             </div>
                         </div>
                     </div>
@@ -41,6 +49,16 @@
                             </div>
                         </div>
                     </div>
+                    <div class="input-group mt-3">
+                        <input type="password" id="password_confirmation" name="password_confirmation"
+                            class="form-control" placeholder="Konfirmasi password" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                        <small id="error-password_confirmation" class="error-text text-danger"></small>
+                    </div>
                     <small id="error-password" class="error-text text-danger"></small>
                     <div class="row mt-3">
                         <div class="col-8">
@@ -50,7 +68,7 @@
                         </div>
                         <!-- /.col -->
                         <div class="col-4">
-                            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                            <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
                         </div>
                         <!-- /.col -->
                     </div>
@@ -59,7 +77,7 @@
                     <p>- OR -</p>
                 </div>
                 <p class="mb-0 ">
-                    Belum Punya Akun? <a href="{{ url('register') }}" class="">Register</a>
+                    Sudah Punya Akun? <a href="{{ url('login') }}" class="">Login</a>
                 </p>
             </div>
             <!-- /.card-body -->
@@ -87,17 +105,28 @@
         });
     
         $(document).ready(function () {
-            $("#form-login").validate({
+            $("#form-register").validate({
                 rules: {
                     username: {
                         required: true,
                         minlength: 4,
                         maxlength: 20
                     },
+                    nama: {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 100
+                    },
                     password: {
                         required: true,
                         minlength: 6,
                         maxlength: 20
+                    },
+                    password_confirmation: {
+                        required: true,
+                        minlength: 6,
+                        maxlength: 20,
+                        equalTo: "#password"
                     }
                 },
                 submitHandler: function (form) {
