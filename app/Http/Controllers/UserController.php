@@ -182,12 +182,12 @@ class UserController extends Controller
             UserModel::create($request->all());
             return response()->json([
                 'status' => true,
-                'success' => 'Data user Berhasil disimpan'
+                'message' => 'Data user Berhasil disimpan'
             ]);
     
         }
         
-        redirect('/user');
+        redirect('/');
     }
 
     public function edit_ajax(string $id) {
@@ -259,5 +259,10 @@ class UserController extends Controller
             }
         }
         return redirect('/user');
+    }
+
+    public function show_ajax(string $id) {
+        $user = UserModel::find($id);
+        return view('user.show_ajax', ['user' => $user]);
     }
 }

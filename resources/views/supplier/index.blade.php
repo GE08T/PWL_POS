@@ -6,8 +6,8 @@
       <div class="card-header"> 
         <h3 class="card-title">{{ $page->title }}</h3> 
         <div class="card-tools"> 
-          <a class="btn btn-sm btn-primary mt-1" href="{{ url('barang/create') }}">Tambah</a>
-          <button onclick="modalAction('{{ url('barang/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah Ajax</button>
+          <a class="btn btn-sm btn-primary mt-1" href="{{ url('supplier/create') }}">Tambah</a>
+          <button onclick="modalAction('{{ url('supplier/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah Ajax</button>
         </div> 
       </div> 
       <div class="card-body"> 
@@ -21,25 +21,23 @@
           <div class="col-md-12">
             <label class="col-1 control-label col-form-label">Filter : </label>
             <div class="col-3">
-              <select class="form-control" id="kategori_id" name="kategori_id" required>
+              <select class="form-control" id="supplier_id" name="supplier_id" required>
                 <option value="">- Semua -</option>
-                @foreach ($kategori as $item) 
-                  <option value="{{ $item->kategori_id }}">{{ $item->kategori_nama }}</option>
+                @foreach ($supplier as $item) 
+                  <option value="{{ $item->supplier_id }}">{{ $item->supplier_nama }}</option>
                 @endforeach
               </select>
-              <small class="form-text text-muted">Kategori Barang</small>
+              <small class="form-text text-muted">Data Supplier</small>
             </div>
           </div>
         </div>
-        <table class="table table-bordered table-striped table-hover table-sm" id="table_barang"> 
+        <table class="table table-bordered table-striped table-hover table-sm" id="table_supplier"> 
           <thead> 
             <tr>
                 <th>ID</th>
-                <th>Kategori</th>
-                <th>Kode Barang</th>
-                <th>Nama Barang</th>
-                <th>Harga Jual</th>
-                <th>Harga Beli</th>
+                <th>Kode Supplier</th>
+                <th>Nama Supplier</th>
+                <th>Alamat Supplier</th>
                 <th>Aksi</th>
             </tr> 
           </thead> 
@@ -54,6 +52,7 @@
  
 @push('js')
   <script>
+
     function modalAction(url = '') {
       $('#myModal').load(url, function() {
         $('#myModal').modal('show');
@@ -61,14 +60,14 @@
     }
 
     $(document).ready(function() {
-        var dataBarang = $('#table_barang').DataTable({
+        var dataSupplier = $('#table_supplier').DataTable({
             serverSide: true,
             ajax: {
-                "url": "{{ url('barang/list') }}",
+                "url": "{{ url('supplier/list') }}",
                 "dataType": "json",
                 "type": "POST",
                 "data": function (d) {
-                  d.kategori_id = $('#kategori_id').val();
+                  d.supplier_kode = $('#supplier_id').val();
                 }
             },
             columns: [
@@ -78,30 +77,20 @@
                     orderable: false,
                     searchable: false
                 },{
-                    data: "kategori.kategori_nama",
+                    data: "supplier_kode",
                     className: "",
                     orderable: true,
                     searchable: true
                 },{
-                    data: "barang_kode",
+                    data: "supplier_nama",
                     className: "",
                     orderable: true,
                     searchable: true
                 },{
-                    data: "barang_nama",
+                    data: "supplier_alamat",
                     className: "",
-                    orderable: false,
-                    searchable: false
-                },{
-                    data: "harga_jual",
-                    className: "",
-                    orderable: false,
-                    searchable: false
-                },{
-                    data: "harga_beli",
-                    className: "",
-                    orderable: false,
-                    searchable: false
+                    orderable: true,
+                    searchable: true
                 },{
                     data: "aksi",
                     className: "",
@@ -111,8 +100,8 @@
             ]
         });
 
-        $('#kategori_id').change(function() {
-          dataBarang.ajax.reload();
+        $('#supplier_id').change(function() {
+          dataSupplier.ajax.reload();
         });
     });
   </script>
