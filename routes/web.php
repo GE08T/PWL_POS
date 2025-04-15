@@ -45,6 +45,7 @@ Route::middleware(['auth'])->group(function() {
             Route::get('/{id}/show_ajax', [UserController::class, 'show_ajax']);
             Route::get('/import', [UserController::class, 'import']);
             Route::post('/import_ajax', [UserController::class, 'import_ajax']);
+            Route::get('/export_excel', [UserController::class, 'export_excel']);
         });
     });
     Route::middleware(['authorize:ADM'])->group(function() {
@@ -59,8 +60,9 @@ Route::middleware(['auth'])->group(function() {
             Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax']);
             Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax']);
             Route::get('/{id}/show_ajax', [LevelController::class, 'show_ajax']);
-            Route::get('/import', [KategoriController::class, 'import']);
-            Route::post('/import_ajax', [KategoriController::class, 'import_ajax']);
+            Route::get('/import', [LevelController::class, 'import']);
+            Route::post('/import_ajax', [LevelController::class, 'import_ajax']);
+            Route::get('/export_excel', [LevelController::class, 'export_excel']);
         });
     });
     Route::middleware(['authorize:ADM,STF'])->group(function() {
@@ -77,6 +79,7 @@ Route::middleware(['auth'])->group(function() {
             Route::get('/{id}/show_ajax', [KategoriController::class, 'show_ajax']);
             Route::get('/import', [KategoriController::class, 'import']);
             Route::post('/import_ajax', [KategoriController::class, 'import_ajax']);
+            Route::get('/export_excel', [KategoriController::class, 'export_excel']);
         });
     });
     
@@ -94,6 +97,7 @@ Route::middleware(['auth'])->group(function() {
             Route::get('/{id}/show_ajax', [SupplierController::class, 'show_ajax']);
             Route::get('/import', [SupplierController::class, 'import']);
             Route::post('/import_ajax', [SupplierController::class, 'import_ajax']);
+            Route::get('/export_excel', [SupplierController::class, 'export_excel']);
         });
     });
     Route::middleware(['authorize:ADM,MNG'])->group(function() {
@@ -110,6 +114,7 @@ Route::middleware(['auth'])->group(function() {
             Route::get('/{id}/show_ajax', [BarangController::class, 'show_ajax']);
             Route::get('/import', [BarangController::class, 'import']);
             Route::post('/import_ajax', [BarangController::class, 'import_ajax']);
+            Route::get('/export_excel', [BarangController::class, 'export_excel']);
         });
     });
 
