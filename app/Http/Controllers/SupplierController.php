@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Validator;
+use PDF;
 use Yajra\DataTables\DataTables;
 
 
@@ -360,5 +361,18 @@ class SupplierController extends Controller
 
         $writer->save('php://output');
         exit;
+    }
+
+    public function export_pdf() {
+        $supplier = SupplierModel::select('supplier_kode', 'supplier_nama', 'supplier_alamat')
+                    ->orderBy('supplier_id')
+                    ->get();
+
+        $pdf = PDF::loadView('supplier.export_pdf', ['supplier' => $supplier]);   
+        $pdf->setPaper('a4', 'potrait');
+        $pdf->setOption("isRemoteEnabled", true); // jika ada gambar
+        $pdf->render();
+
+        return $pdf->stream('Data Supplier '.date('Y-m-d_H-i-s').'.pdf');
     }
 }

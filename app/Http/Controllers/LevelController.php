@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\LevelModel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Validator;
+use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\DataTables;
@@ -349,5 +350,18 @@ class LevelController extends Controller
 
         $writer->save('php://output');
         exit;
+    }
+
+    public function export_pdf() {
+        $level = LevelModel::select('level_kode', 'level_nama')
+                    ->orderBy('level_id')
+                    ->get();
+
+        $pdf = PDF::loadView('level.export_pdf', ['level' => $level]);   
+        $pdf->setPaper('a4', 'potrait');
+        $pdf->setOption("isRemoteEnabled", true); // jika ada gambar
+        $pdf->render();
+
+        return $pdf->stream('Data Level '.date('Y-m-d_H-i-s').'.pdf');
     }
 }

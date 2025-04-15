@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BarangModel;
 use App\Models\KategoriModel;
+use PDF;
 use Illuminate\Http\Request;
 use Validator;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -381,5 +382,19 @@ class BarangController extends Controller
 
         $writer->save('php://output');
         exit;
+    }
+
+    public function export_pdf() {
+        $barang = BarangModel::select('kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual')
+                    ->orderBy('kategori_id')
+                    ->with('kategori')
+                    ->get();
+
+        $pdf = PDF::loadView('barang.export_pdf', ['barang' => $barang]);   
+        $pdf->setPaper('a4', 'potrait');
+        $pdf->setOption("isRemoteEnabled", true); // jika ada gambar
+        $pdf->render();
+
+        return $pdf->stream('Data Barang '.date('Y-m-d_H-i-s').'.pdf');
     }
 }
