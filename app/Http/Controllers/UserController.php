@@ -6,6 +6,7 @@ use App\Models\LevelModel;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Validator;
 use PDF;
@@ -391,5 +392,93 @@ class UserController extends Controller
         $pdf->render();
 
         return $pdf->stream('Data User '.date('Y-m-d_H-i-s').'.pdf');
+    }
+
+    public function profile() {
+        $breadcrumb = (object) [
+            'title' => 'Profil '. auth()->user()->nama,
+            'list' => ['Home','profil']
+        ];
+
+        $page = (object) [
+            'title' => 'Update Profil dan Lihat Profil'
+        ];
+
+        $activeMenu = 'profil';
+        
+        return view('profile.index', compact('breadcrumb', 'page', 'activeMenu'));
+    }
+
+    public function upload_profile_ajax() {
+        $auth = auth()->user();
+        if ($auth && $auth->level_id != 1) {
+            return response()->json(['status' => false, 'message' => 'Maaf anda tidak memiliki akses']);
+        }
+        return view('profile.upload_ajax');
+    }
+
+    public function handle_upload_profile_ajax(Request $request) {
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'profile_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+            ];
+    
+            $validator = Validator::make($request->all(), $rules);
+    
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi gagal',
+                    'msgfield' => $validator->errors()
+                ]);
+            }
+    
+            try {
+                // Mengambil user saat ini
+                $user = auth()->user();
+                $username = $user->username ?? 'user'; // Fallback jika username tidak ada
+                $userId = $user->user_id;
+                
+                // Buat nama file dengan format yang diinginkan
+                $extension = $request->file('profile_url')->getClientOriginalExtension();
+                $filename = 'profil_' . $username . '_' . $userId . '.' . $extension;
+                
+                // Pastikan direktori ada
+                $destinationPath = public_path('profile_picture');
+                if (!file_exists($destinationPath)) {
+                    mkdir($destinationPath, 0755, true);
+                }
+                
+                // Hapus foto profil lama jika ada
+                if ($user->profile_url && $user->profile_url != 'default.jpg') {
+                    $oldPath = public_path('profile_picture/' . $user->profile_url);
+                    if (file_exists($oldPath)) {
+                        unlink($oldPath);
+                    }
+                }
+                
+                // Upload foto baru menggunakan move
+                $file = $request->file('profile_url');
+                $file->move($destinationPath, $filename);
+                
+                // Update database
+                UserModel::where('user_id', $userId)->update(['profile_url' => $filename]);
+                
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Profile berhasil diupdate',
+                    'data' => [
+                        'profile_url' => asset('profile_picture/' . $filename)
+                    ]
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+                ], 500);
+            }
+        }
+        
+        return redirect('/profile');   
     }
 }

@@ -30,6 +30,12 @@ Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth');
 
 Route::middleware(['auth'])->group(function() {
     Route::get('/', [WelcomeController::class, 'index']);
+    Route::group(['prefix' => 'profile'], function() {
+        Route::get('/', [UserController::class, 'profile']);
+        Route::get('/upload_profile_ajax', [UserController::class, 'upload_profile_ajax']);
+        Route::post('/upload_profile_ajax', [UserController::class, 'handle_upload_profile_ajax']);
+
+    });
     Route::middleware(['authorize:ADM'])->group(function() {
         Route::group(['prefix' => 'user'], function() {
             Route::get('/', [UserController::class, 'index']);

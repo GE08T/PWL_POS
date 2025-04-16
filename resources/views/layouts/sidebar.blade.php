@@ -1,4 +1,13 @@
 <div class="sidebar">
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex" bis_skin_checked="1">
+        <div class="image" bis_skin_checked="1">
+            <img src="{{ auth()->user()->profile_url ? asset('profile_picture/' . auth()->user()->profile_url) : asset('storage/profile_picture/blank_profile.jpg') }}" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info" bis_skin_checked="1">
+            <a href="{{ url('/profile') }}" class="d-block">{{ Auth::user()->nama }}</a>
+        </div>
+    </div>
+
     <!-- SidebarSearch Form -->
     <div class="form-inline">
     <div class="input-group" data-widget="sidebar-search">
