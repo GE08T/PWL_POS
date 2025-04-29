@@ -203,7 +203,7 @@ class UserController extends Controller
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
                 'level_id' => 'required|integer',
-                'username' => 'required|string|min:3|unique:m_user,username',
+                'username' => 'required|string|min:3',
                 'nama' => 'required|string|max:100',
                 'password' => 'required|min:6',
             ];
@@ -410,9 +410,13 @@ class UserController extends Controller
     }
 
     public function upload_profile_ajax() {
+        $user = UserModel::find(auth()->user()->user_id);
         $auth = auth()->user();
-        if ($auth && $auth->level_id != 1) {
-            return response()->json(['status' => false, 'message' => 'Maaf anda tidak memiliki akses']);
+        if (!$user) {
+            return response()->json(['status' => false, 'message' => 'User tidak ditemukan']);
+        }
+        if ($user->username !== $auth->username && $auth->level_id !== 1) {
+            return response()->json(['status' => false, 'message' => 'Maaf anda tidak memiliki akses'.$user->username]);
         }
         return view('profile.upload_ajax');
     }

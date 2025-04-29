@@ -192,7 +192,7 @@ class SupplierController extends Controller
     public function update_ajax(Request $request, $id) {
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'supplier_kode' => 'required|string|max:10|unique:m_supplier,supplier_kode',
+                'supplier_kode' => 'required|string|max:10',
                 'supplier_nama' => 'required|string|max:100',
                 'supplier_alamat' => 'required|string|max:255'
             ];

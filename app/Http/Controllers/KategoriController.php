@@ -186,7 +186,7 @@ class KategoriController extends Controller
     public function update_ajax(Request $request, $id) {
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'kategori_kode' => 'required|string|max:10|unique:m_kategori,kategori_kode',
+                'kategori_kode' => 'required|string|max:10',
                 'kategori_nama' => 'required|string|max:100',
             ];
 

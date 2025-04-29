@@ -185,7 +185,7 @@ class LevelController extends Controller
     public function update_ajax(Request $request, $id) {
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'level_kode' => 'required|string|min:3|max:10|unique:m_level,level_kode',
+                'level_kode' => 'required|string|min:3',
                 'level_nama' => 'required|string|max:100',
             ];
 
