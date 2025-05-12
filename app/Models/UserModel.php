@@ -27,6 +27,7 @@ class UserModel extends Authenticatable implements JWTSubject
         'nama',
         'password',
         'profile_url',
+        'image',
     ];
 
     public function level() {
