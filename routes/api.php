@@ -51,3 +51,5 @@ Route::delete('/kategori/{kategori}', [KategoriController::class, 'destroy']);
 
 Route::post('/register1', App\Http\Controllers\Api\RegisterController::class)->name('register1');
 
+Route::post('/upload-barang', [BarangController::class, 'uploadBarang'])->name('upload-barang');
+Route::get('/detail-barang/{barang}', [BarangController::class, 'showUploadedBarang'])->name('detail-barang');
