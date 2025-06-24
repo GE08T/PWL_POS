@@ -312,7 +312,7 @@ class KategoriController extends Controller
     public function export_excel() {
         $kategori = KategoriModel::select('kategori_id', 'kategori_kode', 'kategori_nama')
                     ->orderBy('kategori_id')
-                    ->get();
+                    ->get(); 
         
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();

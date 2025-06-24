@@ -60,7 +60,7 @@ class AuthController extends Controller
             $rules = [
                 'username' => 'required|unique:m_user',
                 'nama' => 'required|string|min:3|max:100',
-                'password' => 'required|min:6|confirmed',
+                'password' => 'required|min:3|confirmed',
             ];
             
             $validator = Validator::make($request->all(), $rules);
